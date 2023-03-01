@@ -17,28 +17,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Node.js setup
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
       
       - name: Trunk setup
-        run: |
-          cargo install trunk
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@v1
+        uses: jetli/trunk-action@v0.4.0
         with:
-          working-directory: ./src-tauri
+          # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
+          version: 'latest'
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v1
+        with:
+          working-directory: ./src-tauri
+
 
       - name: Build
         uses: tauri-apps/tauri-action@v0

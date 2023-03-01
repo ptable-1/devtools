@@ -18,10 +18,14 @@ jobs:
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
       
       - name: Trunk setup
-        run: |
-          cargo install trunk
+        uses: jetli/trunk-action@v0.4.0
+        with:
+          # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
+          version: 'latest'
 
       - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
